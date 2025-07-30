@@ -5,6 +5,7 @@ import Home from './components/Home/Home.jsx';
 import Series from './components/Series/Series.jsx';
 import Footer from './components/Footer/Footer.jsx'; 
 import Film from './components/Film/Film.jsx';
+import Newness from './components/Newness/Newness.jsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/sorozatok" element={<Series />} />
         <Route path="/filmek" element={<Film/>} />
+        <Route path="/uj" element={<Newness />} />
       </Routes>
       <Footer />
     </Router>
