@@ -5,8 +5,16 @@
     display: none;
 }
 
-/* Görgetősáv elrejtése - Firefox */
+
 .no-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+}
+
+
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    background-color: #000; 
+    overflow-x: hidden;
 }
