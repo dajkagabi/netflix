@@ -6,8 +6,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 const API_KEY = "bbc3e7667feec0318a7b4ab40b629cdc";
 const BASE_URL = "https://api.themoviedb.org/3";
 
-const SCROLL_SPEED = 1.5; // pixel/iteráció
-const SCROLL_INTERVAL = 16; // ms (kb. 60fps)
+const SCROLL_SPEED = 1.5; 
+const SCROLL_INTERVAL = 16; 
 
 const Series = () => {
   const [genres, setGenres] = useState([]);

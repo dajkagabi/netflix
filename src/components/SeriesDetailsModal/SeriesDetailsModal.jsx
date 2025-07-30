@@ -1,55 +1,78 @@
 import React from 'react';
 
-const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w780';
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 
 const SeriesDetailsModal = ({ series, onClose }) => {
   if (!series) return null;
 
-  const imageUrl = series.backdrop_path
+  const backdropUrl = series.backdrop_path
     ? `${TMDB_IMAGE_BASE_URL}${series.backdrop_path}`
-    : series.poster_path
+    : '';
+  const posterUrl = series.poster_path
     ? `${TMDB_IMAGE_BASE_URL}${series.poster_path}`
-    : 'https://via.placeholder.com/780x439?text=Nincs+kép';
+    : '';
+
+  const genreNames = series.genreNames || [];
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
     >
       <div
-        className="bg-gray-800 text-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto relative shadow-xl"
+        className="bg-gray-900 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Bezáró gomb */}
         <button
-          className="absolute top-3 right-3 text-white text-2xl bg-black/50 hover:bg-black/80 rounded-full w-10 h-10 flex items-center justify-center z-10"
           onClick={onClose}
+          className="absolute top-4 right-4 text-white text-4xl hover:text-red-500 transition duration-300 z-20"
+          aria-label="Bezárás"
         >
           &times;
         </button>
 
-        {/* Nagyobb kép */}
-        <img
-          src={imageUrl}
-          alt={series.title || series.name}
-          className="w-full h-[300px] md:h-[400px] object-cover rounded-t-lg"
-        />
+        {backdropUrl && (
+          <img
+            src={backdropUrl}
+            alt={series.name || series.title}
+            className="w-full max-h-[60vh] object-contain rounded-t-lg"
+          />
+        )}
 
-        {/* Tartalom */}
-        <div className="p-6">
-          <h2 className="text-3xl font-bold mb-2">{series.title || series.name}</h2>
-          <p className="text-sm text-gray-400 mb-4">
-            {series.first_air_date ? `Első adás: ${series.first_air_date}` : ''}
-            {series.vote_average && ` | Értékelés: ${series.vote_average.toFixed(1)}/10`}
-          </p>
-          <p className="text-gray-300 leading-relaxed mb-4 text-base">
-            {series.overview || 'Nincs leírás elérhető.'}
-          </p>
-          {series.genre_ids && series.genre_ids.length > 0 && (
-            <p className="text-gray-400 text-sm">
-              Műfajok: {series.genre_ids.join(', ')}
-            </p>
+        <div className="flex flex-col md:flex-row p-6 gap-6">
+          {posterUrl ? (
+            <img
+              src={posterUrl}
+              alt={series.name || series.title}
+              className="w-40 md:w-48 h-auto rounded-md border-4 border-gray-800 shadow-lg flex-shrink-0"
+            />
+          ) : (
+            <div className="w-40 md:w-48 h-60 bg-gray-700 flex items-center justify-center text-gray-400 rounded-md border-4 border-gray-800 shadow-lg flex-shrink-0">
+              Nincs kép
+            </div>
           )}
+
+          <div className="flex-1 text-white">
+            <h2 className="text-4xl font-bold mb-3">{series.name || series.title}</h2>
+
+            <p className="text-gray-400 mb-1">
+              {genreNames.length > 0 ? genreNames.join(', ') : 'Nincs műfaj'}
+            </p>
+
+            <p className="text-gray-300 mb-1">
+              Értékelés: {series.vote_average ? series.vote_average.toFixed(1) : 'N/A'} / 10
+            </p>
+
+            <p className="text-gray-300 mb-4">
+              Első vetítés: {series.first_air_date ? series.first_air_date.substring(0, 4) : 'N/A'}
+            </p>
+
+            <p className="leading-relaxed whitespace-pre-line">
+              {series.overview || 'Nincs leírás elérhető.'}
+            </p>
+          </div>
         </div>
       </div>
     </div>

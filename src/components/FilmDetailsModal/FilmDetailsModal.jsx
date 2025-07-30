@@ -1,25 +1,34 @@
 import React from 'react';
 
-const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 
-const FilmDetailsModal = ({ movie, onClose }) => {
-  if (!movie) return null;
+const FilmDetailsModal = ({ film, onClose }) => {
+  if (!film) return null;
 
-  const backdropUrl = movie.backdrop_path ? `${TMDB_IMAGE_BASE_URL}${movie.backdrop_path}` : '';
-  const posterUrl = movie.poster_path ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}` : '';
+  const backdropUrl = film.backdrop_path
+    ? `${TMDB_IMAGE_BASE_URL}${film.backdrop_path}`
+    : '';
+  const posterUrl = film.poster_path
+    ? `${TMDB_IMAGE_BASE_URL}${film.poster_path}`
+    : '';
+
+  const genreNames = film.genreNames || [];
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-      onClick={onClose} 
+      className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
     >
       <div
-        className="bg-gray-800 rounded-lg shadow-lg w-full max-w-3xl overflow-hidden relative"
-        onClick={(e) => e.stopPropagation()} 
+        className="bg-gray-900 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white text-3xl hover:text-gray-400 transition-colors duration-200 z-10"
+          className="absolute top-4 right-4 text-white text-4xl hover:text-red-500 transition duration-300 z-20"
+          aria-label="Bezárás"
         >
           &times;
         </button>
@@ -27,41 +36,43 @@ const FilmDetailsModal = ({ movie, onClose }) => {
         {backdropUrl && (
           <img
             src={backdropUrl}
-            alt={movie.title || movie.name}
-            className="w-full h-48 object-cover object-top"
+            alt={film.title || film.name}
+            className="w-full max-h-[60vh] object-contain rounded-t-lg"
           />
         )}
 
-        <div className="p-6 text-white">
-          <div className="flex -mt-24 mb-4">
-            {posterUrl ? (
-              <img
-                src={posterUrl}
-                alt={movie.title || movie.name}
-                className="w-40 h-60 object-cover rounded-md border-4 border-gray-800 shadow-lg"
-              />
-            ) : (
-              <div className="w-40 h-60 bg-gray-700 flex items-center justify-center text-gray-400 text-center rounded-md border-4 border-gray-800 shadow-lg">
-                Nincs kép
-              </div>
-            )}
-            <div className="ml-6 flex-1">
-              <h2 className="text-4xl font-bold mb-2">{movie.title || movie.name}</h2>
-              <p className="text-lg text-gray-400 mb-2">
-                {movie.genre_ids && movie.genre_ids.length > 0
-                  ? movie.genre_ids.join(', ') 
-                  : 'Nincs műfaj'}
-              </p>
-              <p className="text-md text-gray-300">
-                Értékelés: {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'} / 10
-              </p>
-              <p className="text-md text-gray-300">
-                Megjelenés éve: {movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'}
-              </p>
+        <div className="flex flex-col md:flex-row p-6 gap-6">
+          {posterUrl ? (
+            <img
+              src={posterUrl}
+              alt={film.title || film.name}
+              className="w-40 md:w-48 h-auto rounded-md border-4 border-gray-800 shadow-lg flex-shrink-0"
+            />
+          ) : (
+            <div className="w-40 md:w-48 h-60 bg-gray-700 flex items-center justify-center text-gray-400 rounded-md border-4 border-gray-800 shadow-lg flex-shrink-0">
+              Nincs kép
             </div>
+          )}
+
+          <div className="flex-1 text-white">
+            <h2 className="text-4xl font-bold mb-3">{film.title || film.name}</h2>
+
+            <p className="text-gray-400 mb-1">
+              {genreNames.length > 0 ? genreNames.join(', ') : 'Nincs műfaj'}
+            </p>
+
+            <p className="text-gray-300 mb-1">
+              Értékelés: {film.vote_average ? film.vote_average.toFixed(1) : 'N/A'} / 10
+            </p>
+
+            <p className="text-gray-300 mb-4">
+              Megjelenés éve: {film.release_date ? film.release_date.substring(0, 4) : 'N/A'}
+            </p>
+
+            <p className="leading-relaxed whitespace-pre-line">
+              {film.overview || 'Nincs leírás elérhető.'}
+            </p>
           </div>
-          
-          <p className="text-lg leading-relaxed mt-4">{movie.overview || 'Nincs leírás elérhető.'}</p>
         </div>
       </div>
     </div>
