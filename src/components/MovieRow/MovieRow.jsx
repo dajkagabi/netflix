@@ -6,7 +6,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 const API_KEY = "bbc3e7667feec0318a7b4ab40b629cdc";
 const BASE_URL = "https://api.themoviedb.org/3";
 
-// Az onMovieClick prop hozzáadása
+// Az onMovieClick prop hozzáadása,
 const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000, onMovieClick }) => { 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
