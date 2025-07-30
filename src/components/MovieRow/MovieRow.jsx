@@ -6,7 +6,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 const API_KEY = "bbc3e7667feec0318a7b4ab40b629cdc";
 const BASE_URL = "https://api.themoviedb.org/3";
 
-// FONTOS: Az onMovieClick prop hozzáadása
+// Az onMovieClick prop hozzáadása
 const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000, onMovieClick }) => { 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +55,6 @@ const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000, 
 
   const manualScroll = (direction) => {
     const scrollContainer = scrollRef.current;
-    // Kártyaszélesség frissítve a MovieCard-ban lévő méretekhez
     const cardWidth = scrollContainer.querySelector('.group')?.clientWidth || 160; 
 
     scrollContainer.scrollBy({
@@ -79,7 +78,7 @@ const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000, 
             }
           }, scrollInterval);
         }
-      }, 3000); // 3 másodperc késleltetés
+      }, 3000); 
     }
   };
 
@@ -95,16 +94,15 @@ const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000, 
           className="flex space-x-4 overflow-x-scroll no-scrollbar scroll-smooth"
         >
           {movies.map(movie => (
-            // FONTOS: Az onClick prop továbbítása a MovieCard-nak
+          
             <MovieCard 
               key={movie.id} 
               movie={movie} 
-              onClick={onMovieClick} // <-- EZ AZ ÚJ PROP
+              onClick={onMovieClick} 
             />
           ))}
         </div>
 
-        {/* Nyilak */}
         <button
           onClick={() => manualScroll('left')}
           className="absolute left-0 top-1/2 transform -translate-y-1/2 
