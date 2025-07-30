@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { FaPlay, FaPlus, FaThumbsUp, FaChevronDown } from 'react-icons/fa';
 
-const MovieCard = ({ movie }) => {
+//Az onClick prop hozzáadása
+const MovieCard = ({ movie, onClick }) => { 
   const [isHovered, setIsHovered] = useState(false);
 
-
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w342"; 
-
   const placeholderImage = "https://via.placeholder.com/200x300?text=Kép+Nincs"; 
 
   const getRatingColor = (rating) => {
@@ -17,12 +16,13 @@ const MovieCard = ({ movie }) => {
 
   return (
     <div
-   
       className="relative flex-none w-40 md:w-48 lg:w-56 cursor-pointer 
                  transform hover:scale-110 transition-transform duration-300 ease-out 
                  z-20 hover:z-30 group overflow-hidden rounded-md shadow-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      //Itt hívjuk meg az onClick propot
+      onClick={() => onClick(movie)} 
       style={{ minWidth: '160px', aspectRatio: '2 / 3' }} 
     >
       <img
@@ -32,7 +32,7 @@ const MovieCard = ({ movie }) => {
       />
 
       {isHovered && (
-        <div className="absolute inset-0 bg-black bg-opacity-90 rounded-md 
+        <div className="absolute inset-0 bg-transparent rounded-md  // <-- EZ A MÓDOSÍTÁS A HOVER HÁTTÉRRE
                         flex flex-col justify-between p-3 opacity-0 group-hover:opacity-100 
                         transition-opacity duration-300 ease-in-out">
           <div>
@@ -60,7 +60,10 @@ const MovieCard = ({ movie }) => {
                 <FaThumbsUp className="text-base md:text-lg" />
               </button>
             </div>
-            <button className="border border-gray-500 text-white rounded-full p-2 hover:border-white transition-colors">
+         
+            <button 
+              onClick={(e) => { e.stopPropagation(); onClick(movie); }} 
+              className="border border-gray-500 text-white rounded-full p-2 hover:border-white transition-colors">
               <FaChevronDown className="text-base md:text-lg" />
             </button>
           </div>

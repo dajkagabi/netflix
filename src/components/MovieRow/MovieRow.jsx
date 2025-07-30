@@ -6,7 +6,8 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 const API_KEY = "bbc3e7667feec0318a7b4ab40b629cdc";
 const BASE_URL = "https://api.themoviedb.org/3";
 
-const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000 }) => {
+// FONTOS: Az onMovieClick prop hozzáadása
+const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000, onMovieClick }) => { 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,7 +37,8 @@ const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000 }
       const scrollContainer = scrollRef.current;
       const scrollNext = () => {
         const { scrollLeft, clientWidth, scrollWidth } = scrollContainer;
-        const cardWidth = scrollContainer.querySelector('.group')?.clientWidth || 288;
+        // Kártyaszélesség frissítve a MovieCard-ban lévő méretekhez
+        const cardWidth = scrollContainer.querySelector('.group')?.clientWidth || 160; 
 
         if (scrollLeft + clientWidth + cardWidth >= scrollWidth) {
           scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
@@ -53,7 +55,8 @@ const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000 }
 
   const manualScroll = (direction) => {
     const scrollContainer = scrollRef.current;
-    const cardWidth = scrollContainer.querySelector('.group')?.clientWidth || 288;
+    // Kártyaszélesség frissítve a MovieCard-ban lévő méretekhez
+    const cardWidth = scrollContainer.querySelector('.group')?.clientWidth || 160; 
 
     scrollContainer.scrollBy({
       left: direction === 'left' ? -(cardWidth + 16) * 2 : (cardWidth + 16) * 2,
@@ -63,6 +66,20 @@ const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000 }
     if (intervalId.current) {
       clearInterval(intervalId.current);
       intervalId.current = null;
+      // Újraindítás rövid késleltetés után, ha az automatikus görgetés aktív
+      setTimeout(() => {
+        if (autoScroll && movies.length > 0 && !intervalId.current) {
+          intervalId.current = setInterval(() => {
+            const { scrollLeft, clientWidth, scrollWidth } = scrollContainer;
+            const currentCardWidth = scrollContainer.querySelector('.group')?.clientWidth || 160;
+            if (scrollLeft + clientWidth + currentCardWidth >= scrollWidth) {
+              scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+              scrollContainer.scrollBy({ left: currentCardWidth + 16, behavior: 'smooth' });
+            }
+          }, scrollInterval);
+        }
+      }, 3000); // 3 másodperc késleltetés
     }
   };
 
@@ -78,7 +95,12 @@ const MovieRow = ({ title, fetchUrl, autoScroll = false, scrollInterval = 5000 }
           className="flex space-x-4 overflow-x-scroll no-scrollbar scroll-smooth"
         >
           {movies.map(movie => (
-            <MovieCard key={movie.id} movie={movie} />
+            // FONTOS: Az onClick prop továbbítása a MovieCard-nak
+            <MovieCard 
+              key={movie.id} 
+              movie={movie} 
+              onClick={onMovieClick} // <-- EZ AZ ÚJ PROP
+            />
           ))}
         </div>
 
