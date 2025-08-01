@@ -11,7 +11,7 @@ Ez a projekt egy modern és reszponzív Netflix klón weboldal, amely a legújab
 # Telepítés
 
 Előfeltételek
-- Node.js és npm: A projekt futtatásához és a csomagok kezeléséhez.
+- Node.js és npm
 - Git
 
 Telepítési lépések
